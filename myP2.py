@@ -8,7 +8,7 @@ class Board:
 		self.data = np.zeros((ROWs, COLs))
 		self.winner = None
 		self.end = None
-	
+
 	def HaveSpace(self):
 		p = 0
 		for i in range(0,3):
@@ -33,7 +33,7 @@ class Board:
 		if self.winner != 0:
 			print('player %d  win!'% self.winner)
 			self.end = 1
-	
+
 	def IsEnd(self):
 		self.HaveSpace()
 		self.judge()
@@ -69,6 +69,27 @@ class Board:
 				hashValue = HashValue*3 + i
 		return self.hashValue
 
+def getAllStatesImpl(currentState,currentSymbol, allStates):
+	for i in range(0,ROWs):
+		for j in range(0,COLs):
+			if currentState.data[i][j] == 0:
+				newState = currentState.nextState(i,j,currentSymbol)
+				newHash = newState.getHash()
+				if newHash not in allStates.keys():
+					isEnd = newState.isEnd()
+					allState[newHash] = (newState,isEnd)
+					if not isEnd:
+						getAllStateImopl(newState,2 if currentSymbol == 1 else 1,allStates)
+
+
+def getAllStates():
+	currentSymbol = 1
+	currentState = Board()
+	allStates = dict()
+	allStates[currentState.getHash()] = (currentState, currentState.isEnd)
+	getAllStates(currentState, currentSymbol, allStates)
+	return allStates
+
 class HumanPlayer:
 	def __init__(self,myBo,symbol):
 		self.symbol = symbol
@@ -93,7 +114,7 @@ class AIPlayer:
 		self.state = []
 	def Action(self):
 		if myBo.end!=1:
-			while True:		
+			while True:
 				pos1 =np.random.randint(3)
 				pos2 =np.random.randint(3)
 				if myBo.data[pos1,pos2] == 0:
@@ -116,7 +137,7 @@ class AIPlayer:
 		self.state = None
 	def Action(self):
 		if myBo.end!=1:
-			while True:		
+			while True:
 				pos1 =np.random.randint(3)
 				pos2 =np.random.randint(3)
 				if myBo.data[pos1,pos2] == 0:
