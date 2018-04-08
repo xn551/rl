@@ -33,6 +33,12 @@ class Board:
 		if self.winner != 0:
 			print('player %d  win!'% self.winner)
 			self.end = 1
+	
+	def IsEnd(self):
+		self.HaveSpace()
+		self.judge()
+		return self.end
+
 
 	def plot(self):
 		print('   1   2   3   ')
@@ -50,13 +56,18 @@ class Board:
 			print(out)
 		print(' -------------')
 
-	def current_state(self):
-		index = 0
-		for i in range(0,3):
-			for j in range(0,3):
-				index += self.data[i,j]*power(3,j+3*i )
-		return index
-		
+	def nextState(self,i,j,symbol):
+		BoardNewState = Board()
+		BoardNewState.data = np.copy(self.data)
+		BoardNewState[i,j] = symbol
+		return BoardNewState
+
+	def getHash(self):
+		if self.hashValue = None:
+			hashValue = 0
+			if i in self.data.reshape(ROWs, COLs):
+				hashValue = HashValue*3 + i
+		return self.hashValue
 
 class HumanPlayer:
 	def __init__(self,myBo,symbol):
